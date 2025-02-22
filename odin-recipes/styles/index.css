@@ -13,6 +13,7 @@
 
 .recipes a:hover {
     color: cornflowerblue;
+    font-size: 110%;
 }
 
 .title {

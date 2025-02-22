@@ -1,0 +1,35 @@
+* {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+ img {
+    height: 25%;
+    width: 25%;
+ }
+
+ #home {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 10vh;
+    width: 100%;
+    height: 50%;
+    padding-top: 1vh;
+ }
+
+ #home a {
+    text-decoration: none;
+    color: black;
+    font-size: 1.5rem;
+ }
+ 
+ #home a:hover {
+    color: cornflowerblue;
+    text-decoration: underline;
+ }
+
+ #topnav {
+    height: 13vh;
+    width: 100%;
+    background-color: Yellow;
+ }
