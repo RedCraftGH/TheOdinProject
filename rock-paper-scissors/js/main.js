@@ -8,6 +8,14 @@ let chosen = {
     player: null
 }
 
+const WIN_THRESHOLD = 5;
+
+const gameRules = {
+    rock: {beats: "scissors"},
+    paper: {beats: "rock"},
+    scissors: {beats: "paper"}
+}
+
 function getRandomInt(min, max) {
 
     min = Math.ceil(min);
@@ -15,7 +23,7 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function chooseComputer() {
+function setComputerChoice() {
 
     let selector = getRandomInt(1, 3);
     switch (selector) {
@@ -34,77 +42,44 @@ function chooseComputer() {
     return chosen.computer;
 }
 
-function choosePlayer(coa) {
+function setPlayerChoice(coa) {
 
-    chosen.player = prompt(coa + `\nComputer: ${score.computer}\nPlayer: ${score.player}`);
-    if (!chosen.player) {
+    while (!chosen.player || !["rock", "paper", "scissors"].includes(chosen.player)) {
 
-        choosePlayer("You have to choose something. -_-");
+        chosen.player = gamePrompt(coa).toLowerCase();
     }
-    chosen.player = chosen.player.toLowerCase();
-    if (chosen.player === "rock" || chosen.player === "paper" || chosen.player === "scissors") {
 
-        return chosen.player;
-    } else {
-
-        choosePlayer(`You can't choose ${chosen.player}, silly!`);
-    }
+    return chosen.player;
 }
 
 function compareChosen() {
 
     let player = chosen.player;
     let computer = chosen.computer;
+
+    chosen.computer = null;
+    chosen.player = null;
+
     if (!player || !computer) {
 
         alert("Something went terribly wrong.");
         return;
     }
 
-    switch (player) {
+    if (player === computer) {
 
-        case "rock":
-            if (computer === player) {
+        declareDraw(player, computer);
+        return;
+    } else if (computer === gameRules[player].beats) {
+        
+        declareRoundWinner("player", player, computer);
+        increasePlayer();
+        return;
+    } else {
 
-                alert("It was a tie!");
-            } else if (computer === "paper") {
-
-                increaseComputer();
-                alert(`The computer chose ${computer}! You lose!`);
-            } else {
-
-                increasePlayer();
-                alert(`The computer chose ${computer}! You win!`)
-            }
-        break;
-        case "paper":
-            if (computer === player) {
-
-                alert("It was a tie!");
-            } else if (computer === "scissors") {
-
-                increaseComputer();
-                alert(`The computer chose ${computer}! You lose!`);
-            } else {
-
-                increasePlayer();
-                alert(`The computer chose ${computer}! You win!`)
-            }
-        break;
-        case "scissors":
-            if (computer === player) {
-
-                alert("It was a tie!");
-            } else if (computer === "rock") {
-
-                increaseComputer();
-                alert(`The computer chose ${computer}! You lose!`);
-            } else {
-
-                increasePlayer();
-                alert(`The computer chose ${computer}! You win!`)
-            }
-        break;
+        declareRoundWinner("computer", player, computer);
+        increaseComputer();
+        return;
     }
 }
 
@@ -120,14 +95,14 @@ function increaseComputer() {
 
 function playRound() {
 
-    chooseComputer();
-    choosePlayer("Rock, Paper, or Scissors?");
+    setComputerChoice();
+    setPlayerChoice("Rock, Paper, or Scissors?");
     compareChosen();
 }
 
 function playGame() {
 
-    while (Math.max(score.player, score.computer) < 5) {
+    while (Math.max(score.player, score.computer) < WIN_THRESHOLD) {
 
         playRound();
     }
@@ -160,6 +135,23 @@ function resetGame() {
     }
 }
 
+function gamePrompt(coa) {
+
+   return prompt(coa + `\nComputer: ${score.computer}\nPlayer: ${score.player}`);
+}
+
+function declareDraw(player, computer) {
+
+    return alert(`The player chose: ${player}\nThe computer chose: ${computer}\nThis round is a tie!`)
+}
+
+function declareRoundWinner(winner, player, computer) {
+
+    return alert(`The player chose: ${player}\nThe computer chose: ${computer}\nThe winner is ${winner}!`)
+}
+
 while (true) {
     playGame();
+    let playAgain = confirm("Do you want to play again?");
+    if (!playAgain) break;
 }
