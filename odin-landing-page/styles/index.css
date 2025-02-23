@@ -87,7 +87,7 @@ body {
 
 #content {
     background-color: #E5E7EB;
-    flex-basis: 240vh;
+    flex-basis: 195vh;
 
     display: flex;
     flex-direction: column;
@@ -124,7 +124,63 @@ body {
     border-radius: 10px;
 }
 
+.quote {
+    font-weight: lighter;
+    font-size: 2.25rem;
+    color: #1F2937;
+    margin-bottom: 40vh;
+}
+
+.quote .author {
+
+    margin-left: 32vw;
+    margin-top: 1vh;
+    font-size: 1.5rem;
+}
+
+.calltoaction {
+    background-color: #3882F6;
+    border-radius: 10px;
+    height: 20vh;
+    width: 70vw;
+}
+
+.coaorganizer {
+    height: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15vw;
+}
+
+.coaorganizer button {
+    color: #F9FAF8;
+    font-size: 1.125rem;
+    background-color: inherit;
+    border: 2px solid #F9FAF8;
+    border-radius: 10px;
+    height: 5.5vh;
+    width: 8.5vw;
+    margin-right: 2vw;
+}
+
+.coatext h3 {
+    font-size: 1.5rem;
+    color: #F9FAF8;
+}
+
+.coatext p {
+    font-size: 1.125rem;
+    color: #E5E7EB;
+}
+
 #footer {
+    font-size: 1.125rem;
+    color: #E5E7EB;
+
     background-color: #1F2937;
-    flex-basis: 10vh;
+    flex-basis: 15vh;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 15vh;
 }
