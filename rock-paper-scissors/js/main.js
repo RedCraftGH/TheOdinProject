@@ -31,17 +31,19 @@ function chooseComputer() {
     }
     chosen.computer = chosen.computer.toLowerCase();
 
-    console.log("Computer: " + chosen.computer);
     return chosen.computer;
 }
 
 function choosePlayer(coa) {
 
     chosen.player = prompt(coa + `\nComputer: ${score.computer}\nPlayer: ${score.player}`);
+    if (!chosen.player) {
+
+        choosePlayer("You have to choose something. -_-");
+    }
     chosen.player = chosen.player.toLowerCase();
     if (chosen.player === "rock" || chosen.player === "paper" || chosen.player === "scissors") {
 
-        console.log("Player: " + chosen.player);
         return chosen.player;
     } else {
 
@@ -131,6 +133,7 @@ function playGame() {
     }
 
     declareWinner();
+    resetGame();
 }
 
 function declareWinner() {
@@ -144,4 +147,19 @@ function declareWinner() {
     }
 }
 
-playGame();
+function resetGame() {
+
+    score = {
+        player: 0,
+        computer: 0
+    }
+
+    chosen = {
+        player: null,
+        computer: null
+    }
+}
+
+while (true) {
+    playGame();
+}
