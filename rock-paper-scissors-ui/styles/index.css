@@ -7,8 +7,8 @@
 body {
     min-width: 100%;
     min-height: 100%;
-
-    background-color: peachpuff;
+     
+    background-color: #D1B29B;
     background-image: url("../images/background.svg");
     background-repeat: repeat;
     background-size: 16%;
@@ -28,7 +28,7 @@ body {
 }
 
 .topbar h1, .bottombar h1 {
-    background-color: #A7C7E7;
+    background-color: #7F4F24;
     border-radius: 15px;
     padding: 1% 0;
 }
@@ -131,7 +131,7 @@ body {
 }
 
 .computer img {
-    border: 2px solid #A7C7E7;
+    border: 2px solid #B7A1A4;
     border-radius: 10px;
     background-color: silver;
     margin-left: 42.5%;
@@ -143,7 +143,7 @@ body {
     height: 25rem;
     width: 80%;
     margin-left: 10%;
-    background-color: #A7C7E7;
+    background-color: #B7A1A4;
 
     display: flex;
     justify-content: space-around;
@@ -169,6 +169,6 @@ body {
 
 .arena img:hover, .arena img:active {
     border-radius: 5%;
-    border: 2px solid peachpuff;
+    border: 2px solid #D1B29B;
     cursor: pointer;
 }
