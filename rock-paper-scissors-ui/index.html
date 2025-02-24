@@ -4,9 +4,41 @@
         <meta charset="UTF-8">
         <title>Rock, Paper, Scissors!</title>
         <script src="js/main.js"></script>
+        <link rel="stylesheet" href="./styles/index.css">
     </head>
     <body>
-
-
+        <div class="topbar">
+            <h1><strong>Rock, Paper, Scissors</strong></h1>
+        </div>
+        <div class="display">
+            <h2>RPS Monitor</h2>
+            <div class="screen">
+                <div id="computer">
+                    <h3>Computer:</h3>
+                    <p id="computerscore">0</p>
+                </div>
+                <div id="screendivider"></div>
+                <div id="player">
+                    <h3>Player:</h3>
+                    <p id="playerscore">0</p>
+                </div>
+                <div class="resultscreen">
+                    <h3>placeholder text</h3>
+                </div>
+            </div>
+        </div>
+        <div class="computer">
+            <h2>Computer Chose:</h2>
+            <img src="./images/fist.svg" alt="Computer Choice" width="auto">
+        </div>
+        <div class="arena">
+            <h2>Choose Your Weapon:</h2>
+            <img src="./images/fist.svg" onclick="console.log('clicked')" alt="Rock!" width="auto">
+            <img src="./images/open-hand.svg" alt="Paper!" width="auto">
+            <img src="./images/peace-sign.svg" alt="Scissors!" width="auto">
+        </div>
+        <div class="bottombar" id="swapmargin">
+            <h1><strong>Rock, Paper, Scissors</strong></h1>
+        </div>        
     </body>
 </html>

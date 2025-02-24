@@ -149,9 +149,3 @@ function declareRoundWinner(winner, player, computer) {
 
     return alert(`The player chose: ${player}\nThe computer chose: ${computer}\nThe winner is ${winner}!`)
 }
-
-while (true) {
-    playGame();
-    let playAgain = confirm("Do you want to play again?");
-    if (!playAgain) break;
-}

@@ -1,0 +1,174 @@
+* {
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+    box-sizing: border-box;
+}
+
+body {
+    min-width: 100%;
+    min-height: 100%;
+
+    background-color: peachpuff;
+    background-image: url("../images/background.svg");
+    background-repeat: repeat;
+    background-size: 16%;
+    background-position: center;
+}
+
+.topbar, .bottombar {
+    font-size: 1.75rem;
+    text-align: center;
+    color: white;
+
+    margin-top: 1%;
+    margin-bottom: 5%;
+    margin-left: 20%;
+    cursor: default;
+    width: 60%;
+}
+
+.topbar h1, .bottombar h1 {
+    background-color: #A7C7E7;
+    border-radius: 15px;
+    padding: 1% 0;
+}
+
+#swapmargin {
+    margin-top: 5%;
+    margin-bottom: 1%;
+}
+
+.display {
+    width: 80%;
+    margin-left: 10%;
+    background-color: white;
+    height: 30rem;
+
+    border-top: 5px solid gray;
+    border-left: 5px solid gray;
+    border-right: 5px solid gray;
+
+    border-radius: 15px 15px 0 0;
+}
+
+.display h2 {
+    padding-top: 1vh;
+    text-align: center;
+    text-decoration: underline;
+    color: black;
+}
+
+.screen {
+    border-radius: 15px;
+    border: 4px solid gray;
+
+    margin-left: 2.5%;
+    background-color: black;
+    width: 95%;
+    height: 90%;
+    color: green;
+
+    display: flex;
+}
+
+.screen #computer, .screen #player {
+    width: 50%;
+}
+
+.screen #computer h3, .screen #player h3 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-top: 2%;
+}
+
+.screen #computer p, .screen #player p {
+    font-size: 15rem;
+    text-align: center;
+    margin-top: 10%;
+}
+
+#screendivider {
+    width: 0.025%;
+    height: 100%;
+    background-color: green;
+    display: none;
+}
+
+.resultscreen {
+    content: "";
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    display: default;
+    border-radius: 15px;
+    vertical-align: middle;
+    line-height: 25rem;
+}
+
+.resultscreen h3 {
+    font-size: 3.5rem;
+    text-align: center;
+}
+
+#computer, #player {
+    display: none;
+}
+
+.computer {
+    width: 80%;
+    margin-left: 10%;
+    padding-bottom: 4%;
+    background-color: lightgray;
+
+    border-left: 5px solid gray;
+    border-right: 5px solid gray;
+}
+
+.computer h2 {
+    margin-bottom: 4%;
+    text-align: center;
+    text-decoration: underline;
+}
+
+.computer img {
+    border: 2px solid #A7C7E7;
+    border-radius: 10px;
+    background-color: silver;
+    margin-left: 42.5%;
+    height: auto;
+    width: 15%;
+}
+
+.arena {
+    height: 25rem;
+    width: 80%;
+    margin-left: 10%;
+    background-color: #A7C7E7;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+
+    border-bottom: 5px solid gray;
+    border-left: 5px solid gray;
+    border-right: 5px solid gray;
+
+    border-radius: 0 0 15px 15px;
+}
+.arena h2 {
+    text-align: center;
+    width: 100%;
+    text-decoration: underline;
+}
+
+.arena img {
+    height: auto;
+    width: 15%;
+}
+
+.arena img:hover, .arena img:active {
+    border-radius: 5%;
+    border: 2px solid peachpuff;
+    cursor: pointer;
+}
