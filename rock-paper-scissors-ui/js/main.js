@@ -8,7 +8,17 @@ let chosen = {
     player: null
 }
 
+let screenSelector = 0;
+
+const ONE_SECOND = 1000;
+
 const WIN_THRESHOLD = 5;
+
+const RPS_IMAGES = {
+    rock: "./images/fist.svg",
+    paper: "./images/open-hand.svg",
+    scissors: "./images/peace-sign.svg"
+}
 
 const gameRules = {
     rock: {beats: "scissors"},
@@ -39,86 +49,125 @@ function setComputerChoice() {
     }
     chosen.computer = chosen.computer.toLowerCase();
 
+    setComputerImage(chosen.computer);
+
     return chosen.computer;
 }
 
-function setPlayerChoice(coa) {
+function setComputerImage(choice) {
 
-    while (!chosen.player || !["rock", "paper", "scissors"].includes(chosen.player)) {
+    let imageElement = document.querySelector(".computer img");
+    let path;
+    let counter = 0;
 
-        chosen.player = gamePrompt(coa).toLowerCase();
-    }
+    let lotto = setInterval(() => {
+
+        counter++;
+        if (counter < 30) {
+
+            path = Object.values(RPS_IMAGES)[getRandomInt(0, 2)];
+        } else {
+
+            path = RPS_IMAGES[choice];
+            compareChosen();
+            clearInterval(lotto);
+        }
+        imageElement.src = path;
+        
+    }, ONE_SECOND / 10);
+}
+
+function setPlayerChoice(choice) {
+
+    chosen.player = choice;
+    viewDisplay();
+    setComputerChoice();
 
     return chosen.player;
+}
+
+function viewDisplay() {
+
+    window.scrollTo({
+        top: 181,
+        behavior: "smooth"
+    });
 }
 
 function compareChosen() {
 
     let player = chosen.player;
     let computer = chosen.computer;
+    let winner;
 
     chosen.computer = null;
     chosen.player = null;
 
     if (!player || !computer) {
 
-        alert("Something went terribly wrong.");
+        console.log("Something went terribly wrong.");
         return;
     }
 
     if (player === computer) {
 
-        declareDraw(player, computer);
-        return;
+        winner = "Draw!";
     } else if (computer === gameRules[player].beats) {
         
-        declareRoundWinner("player", player, computer);
+        winner = "You win!"
         increasePlayer();
-        return;
     } else {
 
-        declareRoundWinner("computer", player, computer);
+        winner = "You lose!"
         increaseComputer();
-        return;
     }
+
+    updateDisplay(winner);
 }
 
 function increasePlayer() {
 
-    return score.player++;
+    document.querySelector("#playerscore").innerHTML = ++score.player;
 }
 
 function increaseComputer() {
 
-    return score.computer++;
+    document.querySelector("#computerscore").innerHTML = ++score.computer;
 }
 
-function playRound() {
+function updateDisplay(outcome) {
 
-    setComputerChoice();
-    setPlayerChoice("Rock, Paper, or Scissors?");
-    compareChosen();
+    document.querySelector(".resultscreen h3").innerHTML = outcome;
+
+    let computer = document.querySelector("#computer");
+    let player = document.querySelector("#player");
+    let screenDivider = document.querySelector("#screendivider");
+    let resultScreen = document.querySelector(".resultscreen");
+
+    swapScreens(computer, player, screenDivider, resultScreen);
+    let screenSwap = setInterval(() => {
+
+        swapScreens(computer, player, screenDivider, resultScreen);
+        clearInterval(screenSwap);
+    }, ONE_SECOND * 2);
 }
 
-function playGame() {
+function swapScreens(computer, player, screenDivider, resultScreen) {
 
-    while (Math.max(score.player, score.computer) < WIN_THRESHOLD) {
+    if (screenSelector === 0) {
 
-        playRound();
-    }
-
-    declareWinner();
-    resetGame();
-}
-
-function declareWinner() {
-
-    if (score.player == 5) {
-
-        alert("All games have been played. The winner is the player!" + `\nComputer: ${score.computer}\nPlayer: ${score.player}`);
+        computer.style.display = "none";
+        player.style.display = "none";
+        screenDivider.style.display = "none";
+        resultScreen.style.display = "block";
+        screenSelector++
     } else {
 
-        alert("All games have been played. The winner is the computer!" + `\nComputer: ${score.computer}\nPlayer: ${score.player}`);
+        computer.style.display = "block";
+        player.style.display = "block";
+        screenDivider.style.display = "block";
+        resultScreen.style.display = "none";
+        screenSelector--;
     }
 }
 
@@ -133,19 +182,4 @@ function resetGame() {
         player: null,
         computer: null
     }
-}
-
-function gamePrompt(coa) {
-
-   return prompt(coa + `\nComputer: ${score.computer}\nPlayer: ${score.player}`);
-}
-
-function declareDraw(player, computer) {
-
-    return alert(`The player chose: ${player}\nThe computer chose: ${computer}\nThis round is a tie!`)
-}
-
-function declareRoundWinner(winner, player, computer) {
-
-    return alert(`The player chose: ${player}\nThe computer chose: ${computer}\nThe winner is ${winner}!`)
 }

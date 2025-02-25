@@ -3,7 +3,6 @@
     <head>
         <meta charset="UTF-8">
         <title>Rock, Paper, Scissors!</title>
-        <script src="js/main.js"></script>
         <link rel="stylesheet" href="./styles/index.css">
     </head>
     <body>
@@ -28,17 +27,18 @@
             </div>
         </div>
         <div class="computer">
-            <h2>Computer Chose:</h2>
+            <h2>Computer Choice:</h2>
             <img src="./images/fist.svg" alt="Computer Choice" width="auto">
         </div>
         <div class="arena">
             <h2>Choose Your Weapon:</h2>
-            <img src="./images/fist.svg" onclick="console.log('clicked')" alt="Rock!" width="auto">
-            <img src="./images/open-hand.svg" alt="Paper!" width="auto">
-            <img src="./images/peace-sign.svg" alt="Scissors!" width="auto">
+            <img src="./images/fist.svg" onclick="setPlayerChoice('rock')" alt="Rock!" width="auto">
+            <img src="./images/open-hand.svg" onclick="setPlayerChoice('paper')" alt="Paper!" width="auto">
+            <img src="./images/peace-sign.svg" onclick="setPlayerChoice('scissors')" alt="Scissors!" width="auto">
         </div>
         <div class="bottombar" id="swapmargin">
             <h1><strong>Rock, Paper, Scissors</strong></h1>
-        </div>        
+        </div>     
+        <script src="js/main.js"></script>   
     </body>
 </html>
