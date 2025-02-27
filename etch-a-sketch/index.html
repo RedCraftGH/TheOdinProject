@@ -10,9 +10,18 @@
             <h1>Etch-A-Sketch</h1>
         </div>
         <div class="etchsketch">
-            <div class="screen">
-
+            <div class="leftknob"></div>
+            <div class="screen"></div>
+            <div class="rightknob"></div>
+        </div>
+        <div class="controls">
+            <div id="slider">
+                <label for="gridsize">Resolution:</label>
+                <label id="display" for="gridsize">placeholder</label>
+                <input type="range" id="gridsize" name="gridsize" min="8" max="100" oninput="updateDisplay()">
             </div>
+            <button type="button" id="clear" onclick="clearScreen()">Clear!</button>
+            <button type="button" id="rebuild" onclick="rebuildScreen()">Change Resolution</button>
         </div>
         <div class="bottombar">
 
