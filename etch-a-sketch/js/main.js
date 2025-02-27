@@ -63,6 +63,7 @@ function clearScreen() {
 
         pixel.style.backgroundColor = "#C0C0C0";
     }
+    clearPixelIndex();
 }
 
 function toggleActive() {
@@ -97,6 +98,7 @@ function rebuildScreen() {
     active = false;
     removeDivisions();
     buildEtchSketch(height);
+    clearPixelIndex();
 }
 
 function updateDisplay() {
@@ -116,50 +118,46 @@ function findPixels(pixelIndex) {
 
     let line = [];
 
-    let dx = Math.abs(x2 - x1);
-    let dy = Math.abs(y2 - y1);
-    let sx = x1 < x2 ? 1 : -1;
-    let sy = y1 < y2 ? width : -width;
+    const dx = Math.abs(x2 - x1);
+    const dy = Math.abs(y2 - y1);
+    const sx = (x1 < x2) ? 1 : -1;
+    const sy = (y1 < y2) ? 1 : -1;
     let err = dx - dy;
-    console.log({dx, dy});
-    console.log({sx, sy});
-    console.log({err});
 
-    do {
-        line.push({x: x1, y: y1});
-        console.log({x: x1, y: y1});
+    while (true) {
 
-        if (dx !== 0 && x1 != x2) {
+        // Add the current point to the points list
+        line.push([x1, y1]);
 
+        // If we've reached the destination point, stop
+        if (x1 === x2 && y1 === y2) {
+            break;
+        }
+
+        // 2 * error term
+        const e2 = 2 * err;
+
+        // Step in the x-direction if needed
+        if (e2 > -dy) {
+            err -= dy;
             x1 += sx;
-            console.log({x1});
         }
-        if (dy !== 0 && y1 != y2) {
 
+        // Step in the y-direction if needed
+        if (e2 < dx) {
+            err += dx;
             y1 += sy;
-            console.log({y1});
         }
-        
-        // if (2 * err > -dy) {
-        //     err -= dy;
-        //     x1 += sx;
-        // }
-        // if (2 * err < dx) {
-        //     err += dx;
-        //     y1 += sy;
-        // }
     }
-    while (!(x1 == x2 && y1 == y2));
 
-    console.log(line);
-    buildLine(line);   
+    buildLine(line);
 }
 
 function buildLine(line) {
 
     for (const point of line) {
 
-        let pixelId = point.x + point.y;
+        let pixelId = point[0] + (point[1] * width);
         
         pixels[pixelId].style.backgroundColor = "darkgray";
     }
@@ -168,6 +166,7 @@ function buildLine(line) {
 function buildPixelIndex(pixel) {
 
     let pixelId = pixels.indexOf(pixel);
+    console.log(pixelId);
     let pixelX;
     let pixelY;
 
@@ -186,23 +185,25 @@ function buildPixelIndex(pixel) {
             break;
         }
     }
+    
     pixelX = pixelId - pixelY;
+    pixelY /= width;
 
     if (pixelIndex.firstPixel.x === null) {
 
         pixelIndex.firstPixel.x = pixelX;
         pixelIndex.firstPixel.y = pixelY;
-        console.log(pixelIndex);
     } else if (pixelIndex.secondPixel.x === null) {
 
         pixelIndex.secondPixel.x = pixelX;
         pixelIndex.secondPixel.y = pixelY;
 
         findPixels(pixelIndex);
-        console.log(pixelIndex);
     } else {
 
-        clearPixelIndex();
+        pixelIndex.firstPixel.x = pixelIndex.secondPixel.x;
+        pixelIndex.firstPixel.y = pixelIndex.secondPixel.y;
+        pixelIndex.secondPixel.x = null;
         buildPixelIndex(pixel);
     }
 }
