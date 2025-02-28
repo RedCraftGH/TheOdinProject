@@ -12,6 +12,8 @@ let active = false;
 let rainbow = false;
 let grayscale = false;
 
+let keyControls = false;
+
 let pixels = [];
 
 let pixelIndex = {
@@ -92,17 +94,6 @@ function removeDivisions() {
     }
 }
 
-function managePixels(e) {
-
-    active = true;
-
-    if (e.target !== screen && active) {
-
-        buildPixelIndex(e.target);
-        e.target.style.backgroundColor = '#A9A9A9';
-    }
-}
-
 function rebuildScreen() {
     
     height = document.querySelector("#gridsize").value;
@@ -125,7 +116,6 @@ function resetPointer() {
 
     pointer.x = 0;
     pointer.y = height - 1;
-    console.log(pointer);
 }
 
 function findPixels(pixelIndex) {
@@ -227,8 +217,6 @@ function buildPixelIndex(pixel) {
     pixelX = pixelId - pixelY;
     pixelY /= width;
 
-    console.log({pixelX, pixelY});
-
     if (pixelIndex.firstPixel.x === null) {
 
         pixelIndex.firstPixel.x = pixelX;
@@ -274,9 +262,62 @@ function toggleGrayScale() {
     if (grayscale && rainbow) rainbow = !rainbow;
 }
 
+function toggleKeyControls() {
+
+    clearScreen();
+    keyControls = !keyControls;
+}
+
+function handleClicks(e) {
+
+    if (keyControls) return;
+
+    active = true;
+
+    if (e.target !== screen && active) {
+
+        buildPixelIndex(e.target);
+        e.target.style.backgroundColor = '#A9A9A9';
+    }
+}
+
+function handleKeys(e) {
+
+    let key = e.key;
+
+    if (e.key === 'e') clearScreen();
+
+    if (!keyControls) return;
+
+    switch (key) {
+
+        case 'ArrowUp':
+            e.preventDefault();
+            if (pointer.y > 0) pointer.y--;
+            break;
+        case 'ArrowDown':
+            e.preventDefault();
+            if (pointer.y < height - 1) pointer.y++;
+            break;
+        case 'ArrowLeft':
+            e.preventDefault();
+            if (pointer.x > 0) pointer.x--;
+            break;
+        case 'ArrowRight':
+            e.preventDefault();
+            if (pointer.x < width - 1) pointer.x++;
+            break;
+    }
+
+    let pixelId = pointer.x + pointer.y * width;
+    pixels[pixelId].style.backgroundColor = "#A9A9A9";
+}
+
 // screen.addEventListener('mouseover', managePixels);
 
-screen.addEventListener('mousedown', managePixels);
+screen.addEventListener('mousedown', handleClicks);
+
+window.addEventListener('keydown', handleKeys);
 
 buildEtchSketch(height);
 updateDisplay();

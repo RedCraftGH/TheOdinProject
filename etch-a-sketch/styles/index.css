@@ -89,7 +89,7 @@ body {
     width: 100%;
 }
 
-#clear, #rebuild, #rainbow, #grayscale {
+#clear, #rebuild, #rainbow, #grayscale, #keycontrols {
     height: 25%;
     width: 20%;
 }
