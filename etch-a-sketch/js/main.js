@@ -5,6 +5,9 @@ let display = document.querySelector("#display");
 const DISPLAY_RATIO = 2;
 const ERROR_MARGIN = 0.999;
 
+const BACKGROUND_COLOR = "#C0C0C0";
+const DEF_LINE_COLOR = "#A9A9A9";
+
 let height = slider.value;
 let width = height * DISPLAY_RATIO;
 
@@ -34,6 +37,7 @@ let pointer = {
 
 function buildEtchSketch(height) {
 
+    updateDisplay();
     let dimensions = calcDimensions(height);
     pixels = [];
     let tmp = {
@@ -59,7 +63,7 @@ function createDivisions(dimensions) {
         let pixel = document.createElement("div");
         pixel.style.width = dimensions[1] + "px";
         pixel.style.height = dimensions[2] + "px";
-        colorPixel(pixel, "#C0C0C0");
+        colorPixel(pixel, BACKGROUND_COLOR);
         pixel.lightness = 75;
         pixels.push(pixel);
         fragment.appendChild(pixel);
@@ -107,7 +111,7 @@ function clearScreen() {
 
     for (let pixel of pixels) {
 
-        colorPixel(pixel, "#C0C0C0");
+        colorPixel(pixel, BACKGROUND_COLOR);
         pixel.lightness = 75;
     }
     clearPixelIndex();
@@ -195,11 +199,14 @@ function findPixels(pixelIndex) {
 
 function buildLine(line) {
 
+    line.shift();
+    line.pop();
+
     for (const point of line) {
 
         let pixelId = point[0] + (point[1] * width);
         
-        colorPixel(pixels[pixelId], "#A9A9A9");
+        colorPixel(pixels[pixelId], DEF_LINE_COLOR);
         
     }
 }
@@ -289,7 +296,7 @@ function handleClicks(e) {
     if (e.target !== screen) {
 
         buildPixelIndex(e.target);
-        colorPixel(e.target, "#A9A9A9");
+        colorPixel(e.target, DEF_LINE_COLOR);
     }
 }
 
@@ -305,7 +312,7 @@ function handleKeys(e) {
     let pointerId = pointer.x + pointer.y * width;
     if (dir === null) {
         
-        colorPixel(pixels[pointerId], "#A9A9A9");
+        colorPixel(pixels[pointerId], DEF_LINE_COLOR);
         dir = -1;
         return;
     };
@@ -317,7 +324,7 @@ function handleKeys(e) {
 
             if (dir === 1) {
 
-                colorPixel(pixels[pointerId], "#A9A9A9");
+                colorPixel(pixels[pointerId], DEF_LINE_COLOR);
                 dir = 0;
                 return;
             }
@@ -330,7 +337,7 @@ function handleKeys(e) {
 
             if (dir === 0) {
 
-                colorPixel(pixels[pointerId], "#A9A9A9");
+                colorPixel(pixels[pointerId], DEF_LINE_COLOR);
                 dir = 1;
                 return;
             }
@@ -343,7 +350,7 @@ function handleKeys(e) {
 
             if (dir === 3) {
 
-                colorPixel(pixels[pointerId], "#A9A9A9");
+                colorPixel(pixels[pointerId], DEF_LINE_COLOR);
                 dir = 2;
                 return;
             }
@@ -356,7 +363,7 @@ function handleKeys(e) {
 
             if (dir === 2) {
 
-                colorPixel(pixels[pointerId], "#A9A9A9");
+                colorPixel(pixels[pointerId], DEF_LINE_COLOR);
                 dir = 3;
                 return;
             }
@@ -367,7 +374,7 @@ function handleKeys(e) {
     }
 
     let pixelId = pointer.x + pointer.y * width;
-    colorPixel(pixels[pixelId], "#A9A9A9");
+    colorPixel(pixels[pixelId], DEF_LINE_COLOR);
 }
 
 function colorPixel(pixel, color) {
@@ -392,4 +399,3 @@ window.addEventListener('keydown', handleKeys);
 window.addEventListener('resize', resizeScreen);
 
 buildEtchSketch(height);
-updateDisplay();
