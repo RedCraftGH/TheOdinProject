@@ -6,13 +6,13 @@ const DISPLAY_RATIO = 2;
 const ERROR_MARGIN = 0.999;
 
 const BACKGROUND_COLOR = "#C0C0C0";
-const DEF_LINE_COLOR = "#A9A9A9";
+let lineColor = "#A9A9A9";
 
 let height = slider.value;
 let width = height * DISPLAY_RATIO;
 
 let rainbow = false;
-let grayscale = true;
+let grayscale = false;
 
 let keyControls = false;
 let dir = null;
@@ -85,6 +85,13 @@ function resizeScreen() {
 
     let colorOrder = [];
 
+    let colorMode = {
+        grayscale: grayscale,
+        rainbow, rainbow
+    }
+    grayscale = false;
+    rainbow = false;
+
     for (let pixel of pixels) {
 
         colorOrder.push(pixel.style.backgroundColor);
@@ -98,6 +105,9 @@ function resizeScreen() {
 
         colorPixel(pixels[i], colorOrder[i]);
     }
+
+    grayscale = colorMode.grayscale;
+    rainbow = colorMode.rainbow;
 }
 
 function clearScreen() {
@@ -170,24 +180,19 @@ function findPixels(pixelIndex) {
 
     while (true) {
 
-        // Add the current point to the points list
         line.push([x1, y1]);
 
-        // If we've reached the destination point, stop
         if (x1 === x2 && y1 === y2) {
             break;
         }
 
-        // 2 * error term
         const e2 = 2 * err;
 
-        // Step in the x-direction if needed
         if (e2 > -dy) {
             err -= dy;
             x1 += sx;
         }
 
-        // Step in the y-direction if needed
         if (e2 < dx) {
             err += dx;
             y1 += sy;
@@ -201,12 +206,12 @@ function buildLine(line) {
 
     line.shift();
     line.pop();
-
+    
     for (const point of line) {
 
         let pixelId = point[0] + (point[1] * width);
         
-        colorPixel(pixels[pixelId], DEF_LINE_COLOR);
+        colorPixel(pixels[pixelId]);
         
     }
 }
@@ -273,18 +278,52 @@ function toggleRainbow() {
 
     rainbow = !rainbow;
     if (grayscale && rainbow) grayscale = !grayscale;
+
+    // recolorPixels();
 }
 
 function toggleGrayScale() {
 
     grayscale = !grayscale;
     if (grayscale && rainbow) rainbow = !rainbow;
+
+    // recolorPixels();
+}
+
+function recolorPixels() {
+
+    for (let pixel of pixels) {
+
+        let pixelColor = pixel.style.backgroundColor.split("(")[1].split(")")[0];
+        pixelColor = pixelColor.split(",");
+        var tmp = pixelColor.map((x) => {
+            x = parseInt(x).toString(16);
+            return (x.length == 1) ? "0" + x : x;
+        });
+        pixelColor = "#" + tmp.join("").toUpperCase();
+
+        if (pixelColor != BACKGROUND_COLOR) {
+
+            if (grayscale && pixel.lightness !== 75) {
+
+                pixel.lightness += 10;
+            }
+            colorPixel(pixel);
+        }
+    }
 }
 
 function toggleKeyControls() {
 
-    clearScreen();
     keyControls = !keyControls;
+
+    clearScreen();
+
+    if (keyControls) {
+        document.querySelector("#keycontrols").innerHTML = "Mouse Controls!"
+    } else {
+        document.querySelector("#keycontrols").innerHTML = "Arrow Key Controls!"
+    }
 }
 
 function handleClicks(e) {
@@ -296,7 +335,7 @@ function handleClicks(e) {
     if (e.target !== screen) {
 
         buildPixelIndex(e.target);
-        colorPixel(e.target, DEF_LINE_COLOR);
+        colorPixel(e.target);
     }
 }
 
@@ -312,7 +351,7 @@ function handleKeys(e) {
     let pointerId = pointer.x + pointer.y * width;
     if (dir === null) {
         
-        colorPixel(pixels[pointerId], DEF_LINE_COLOR);
+        colorPixel(pixels[pointerId]);
         dir = -1;
         return;
     };
@@ -324,7 +363,7 @@ function handleKeys(e) {
 
             if (dir === 1) {
 
-                colorPixel(pixels[pointerId], DEF_LINE_COLOR);
+                colorPixel(pixels[pointerId]);
                 dir = 0;
                 return;
             }
@@ -337,7 +376,7 @@ function handleKeys(e) {
 
             if (dir === 0) {
 
-                colorPixel(pixels[pointerId], DEF_LINE_COLOR);
+                colorPixel(pixels[pointerId]);
                 dir = 1;
                 return;
             }
@@ -350,7 +389,7 @@ function handleKeys(e) {
 
             if (dir === 3) {
 
-                colorPixel(pixels[pointerId], DEF_LINE_COLOR);
+                colorPixel(pixels[pointerId]);
                 dir = 2;
                 return;
             }
@@ -363,7 +402,7 @@ function handleKeys(e) {
 
             if (dir === 2) {
 
-                colorPixel(pixels[pointerId], DEF_LINE_COLOR);
+                colorPixel(pixels[pointerId]);
                 dir = 3;
                 return;
             }
@@ -374,10 +413,10 @@ function handleKeys(e) {
     }
 
     let pixelId = pointer.x + pointer.y * width;
-    colorPixel(pixels[pixelId], DEF_LINE_COLOR);
+    colorPixel(pixels[pixelId]);
 }
 
-function colorPixel(pixel, color) {
+function colorPixel(pixel, color = lineColor) {
 
     if (rainbow) {
 
@@ -390,6 +429,12 @@ function colorPixel(pixel, color) {
     }
 
     pixel.style.backgroundColor = color;
+}
+
+function setLineColor() {
+
+    let color = document.querySelector("#colorselector").value;
+    lineColor = color;
 }
 
 screen.addEventListener('mousedown', handleClicks);
