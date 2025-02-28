@@ -68,7 +68,7 @@ body {
     margin-right: auto;
     margin-top: 6%;
 
-    width: 40%;
+    width: 50%;
     height: 20%;
     display: flex;
     flex-wrap: wrap;
@@ -89,7 +89,7 @@ body {
     width: 100%;
 }
 
-#clear, #rebuild {
+#clear, #rebuild, #rainbow, #grayscale {
     height: 25%;
-    width: 30%;
+    width: 20%;
 }

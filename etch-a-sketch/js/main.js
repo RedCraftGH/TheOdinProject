@@ -9,6 +9,8 @@ let height = slider.value;
 let width = height * DISPLAY_RATIO;
 
 let active = false;
+let rainbow = false;
+let grayscale = false;
 
 let pixels = [];
 
@@ -23,11 +25,17 @@ let pixelIndex = {
     }
 }
 
+let pointer = {
+    x: null,
+    y: null
+};
+
 function buildEtchSketch(height) {
 
     let dimensions = calcDimensions(height);
     pixels = [];
     createDivisions(dimensions);
+    resetPointer();
 }
 
 function createDivisions(dimensions) {
@@ -39,6 +47,8 @@ function createDivisions(dimensions) {
         let pixel = document.createElement("div");
         pixel.style.width = dimensions[1] + "px";
         pixel.style.height = dimensions[2] + "px";
+        pixel.style.backgroundColor = "#C0C0C0";
+        pixel.lightness = 70;
         pixels.push(pixel);
         fragment.appendChild(pixel);
     }
@@ -62,8 +72,10 @@ function clearScreen() {
     for (let pixel of pixels) {
 
         pixel.style.backgroundColor = "#C0C0C0";
+        pixel.lightness = 70;
     }
     clearPixelIndex();
+    resetPointer();
 }
 
 function toggleActive() {
@@ -87,7 +99,7 @@ function managePixels(e) {
     if (e.target !== screen && active) {
 
         buildPixelIndex(e.target);
-        e.target.style.backgroundColor = "darkgray";
+        e.target.style.backgroundColor = '#A9A9A9';
     }
 }
 
@@ -103,9 +115,17 @@ function rebuildScreen() {
 
 function updateDisplay() {
 
-    height = document.querySelector("#gridsize").value;
-    width = height * DISPLAY_RATIO;
+    let height = document.querySelector("#gridsize").value;
+    let width = height * DISPLAY_RATIO;
+    
     display.innerHTML = `${width}x${height}`;
+}
+
+function resetPointer() {
+
+    pointer.x = 0;
+    pointer.y = height - 1;
+    console.log(pointer);
 }
 
 function findPixels(pixelIndex) {
@@ -155,18 +175,36 @@ function findPixels(pixelIndex) {
 
 function buildLine(line) {
 
+    let color = "#A9A9A9";
+
     for (const point of line) {
 
         let pixelId = point[0] + (point[1] * width);
         
-        pixels[pixelId].style.backgroundColor = "darkgray";
+        if (rainbow) {
+
+            color = "#" + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+        }
+
+        if (grayscale) {
+            
+            if (pixels[pixelId].lightness !== 0) pixels[pixelId].lightness -= 10;
+
+            let lightness = pixels[pixelId].lightness;
+
+            pixels[pixelId].style.backgroundColor = `hsl(0, 0%, ${lightness}%)`;
+
+        } else {
+
+            pixels[pixelId].style.backgroundColor = color;
+        }
+        
     }
 }
 
 function buildPixelIndex(pixel) {
 
     let pixelId = pixels.indexOf(pixel);
-    console.log(pixelId);
     let pixelX;
     let pixelY;
 
@@ -188,6 +226,8 @@ function buildPixelIndex(pixel) {
     
     pixelX = pixelId - pixelY;
     pixelY /= width;
+
+    console.log({pixelX, pixelY});
 
     if (pixelIndex.firstPixel.x === null) {
 
@@ -220,6 +260,18 @@ function clearPixelIndex() {
             y: null
         }
     }
+}
+
+function toggleRainbow() {
+
+    rainbow = !rainbow;
+    if (grayscale && rainbow) grayscale = !grayscale;
+}
+
+function toggleGrayScale() {
+
+    grayscale = !grayscale;
+    if (grayscale && rainbow) rainbow = !rainbow;
 }
 
 // screen.addEventListener('mouseover', managePixels);

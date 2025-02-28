@@ -18,10 +18,12 @@
             <div id="slider">
                 <label for="gridsize">Resolution:</label>
                 <label id="display" for="gridsize">placeholder</label>
-                <input type="range" id="gridsize" name="gridsize" min="8" max="100" oninput="updateDisplay()">
+                <input type="range" id="gridsize" name="gridsize" min="5" max="125" oninput="updateDisplay()">
             </div>
             <button type="button" id="clear" onclick="clearScreen()">Clear!</button>
             <button type="button" id="rebuild" onclick="rebuildScreen()">Change Resolution</button>
+            <button type="button" id="rainbow" onclick="toggleRainbow()">Rainbow Mode!</button>
+            <button type="button" id="grayscale" onclick="toggleGrayScale()">Grayscale Mode!</button>
         </div>
         <div class="bottombar">
 
