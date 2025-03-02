@@ -1,8 +1,15 @@
 let termOneComplete = false;
-let termOne = "";
+let termOne = "0";
 let termTwo = "";
 let currentOperation = false;
 let displayWidth = document.querySelector(".display").clientWidth;
+let expectOperator = false;
+
+let lastOp = {
+
+    operator: null,
+    term: null
+}
 
 const numberIds = [
     0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 3.14, 2.71828, 50
@@ -33,6 +40,12 @@ function sendInput(buttonId) {
 
 function handleNumber(number) {
 
+    if (expectOperator) {
+
+        clearCalc();
+
+    }
+
     if (number === 50) number = ".";
     
     if (!termOneComplete) {
@@ -42,8 +55,9 @@ function handleNumber(number) {
             handleOverflow();
             return;
         }
+
+        termOne = (termOne == "0") ? number.toString() : termOne.toString() + number;
         
-        termOne = termOne.toString() + number;
         updateDisplay(termOne);
         console.log({termOne});
     } else {
@@ -62,37 +76,28 @@ function handleNumber(number) {
 
 function handleOperator(operator) {
 
-    let symbol = findSymbol(operator);
+    if (termOne === "") {
 
-    if (termOne === "") handleInvalidOperation();
+        handleInvalidOperation();
+        return;
+    }
 
     if (!termOneComplete) {
 
         termOneComplete = true;
         updateDisplay("");
         currentOperation = operator;
+    } else if (termTwo === "") {
+        
+        currentOperation = operator;
+        updateDisplay("");
     } else {
 
-        //this block only runs if an operator is pressed AND the first term is
-        //already complete. This will evaluate whatever the current first
-        //and second terms are and display the answer as the first term being
-        //operated on by the pressed on operator.
+        findAnswer();
+        currentOperation = operator;
+        console.log({currentOperation});
     }
-}
-
-function findSymbol(id) {
-
-    switch (id) {
-
-        case 10:
-            return "+";
-        case 11:
-            return "-";
-        case 12:
-            return "x"
-        case 13:
-            return "÷"
-    }
+    expectOperator = false;
 }
 
 function handleCommand(command) {
@@ -140,10 +145,16 @@ function handleOverflow() {
 
 function handleInvalidOperation() {
 
-    
+    updateDisplay("Invalid Operation");
+
+    let screenTimer = setInterval(() => {
+
+        clearCalc();
+        clearInterval(screenTimer);
+    }, 1000);
 }
 
-function updateDisplay(text) {
+function updateDisplay(text = "0") {
 
     let display = document.querySelector(".display p");
     display.innerHTML = text;
@@ -166,6 +177,7 @@ function clearCalc() {
     termTwo = "";
     termOneComplete = false;
     currentOperation = false;
+    expectOperator = false;
 }
 
 function sqrt() {
@@ -202,6 +214,29 @@ function findAnswer() {
 
     let answer;
 
+    console.log({termOneComplete, termOne, termTwo});
+    
+    if (termTwo === "") {
+
+        console.log("null");
+        console.log(lastOp.operator);
+        console.log({currentOperation});
+
+        if (lastOp.operator === null) {
+
+            handleInvalidOperation();
+            return;
+        } else if (currentOperation == false) {
+
+            currentOperation = lastOp.operator;
+            termTwo = lastOp.term;
+        } else {
+
+            handleInvalidOperation();
+            return;
+        }
+    }
+
     switch (currentOperation) {
 
         case 10:
@@ -218,37 +253,92 @@ function findAnswer() {
             break;
     }
 
-    updateDisplay(answer);
+    lastOp.operator = currentOperation;
+    lastOp.term = termTwo;
+    clearCalc();
+
+    console.log({answer});
+
+    termOne = answer.toString();
+    termOneComplete = true;
+    expectOperator = true;
+    console.log({termOne});
+    updateDisplay(termOne);
+
+    if (checkOverflow()) {
+
+        handleOverflow();
+    }
 }
 
 function addTerms() {
 
-    termOne = termOne.toFloat();
-    termTwo = termTwo.toFloat();
+    termOne = parseFloat(termOne);
+    termTwo = parseFloat(termTwo);
 
-    return termOne + termTwo;
+    let answer = (termOne + termTwo).toString();
+
+    answer = fixDecimalLength(answer);
+
+    return answer;
 }
 
 function subtractTerms() {
 
-    termOne = termOne.toFloat();
-    termTwo = termTwo.toFloat();
+    termOne = parseFloat(termOne);
+    termTwo = parseFloat(termTwo);
 
-    return termOne - termTwo;
+    let answer = (termOne - termTwo).toString();
+    console.log({answer});
+
+    answer = fixDecimalLength(answer);
+
+    return answer;
 }
 
 function multiplyTerms() {
 
-    termOne = termOne.toFloat();
-    termTwo = termTwo.toFloat();
+    termOne = parseFloat(termOne);
+    termTwo = parseFloat(termTwo);
 
-    return termOne * termTwo;
+    let answer = (termOne * termTwo).toString();
+
+    answer = fixDecimalLength(answer);
+
+    return answer;
 }
 
 function divideTerms() {
 
-    termOne = termOne.toFloat();
-    termTwo = termTwo.toFloat();
+    termOne = parseFloat(termOne);
+    termTwo = parseFloat(termTwo);
 
-    return termOne / termTwo;
+    let answer = (termOne / termTwo).toString();
+
+    answer = fixDecimalLength(answer);
+
+    if (termTwo == 0) {
+
+        answer = Infinity;
+    }
+
+    return answer;
+}
+
+function fixDecimalLength(answer) {
+
+    if (answer.includes(".") && answer.length > 11) {
+
+        let divider = answer.split(".");
+        let decimalLimit = 6 - divider[0].length;
+        if (decimalLimit <= 0) {
+           decimalLimit = 0;
+        }
+        answer = parseFloat(answer).toFixed(decimalLimit);
+    } else {
+
+        answer = parseFloat(answer);
+        console.log({answer});
+    }
+    return answer;
 }
