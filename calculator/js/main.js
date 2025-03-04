@@ -70,7 +70,7 @@ function handleNumber(number) {
             return;
         }
 
-        if (termTwo !== "0" && (number === 3.14 || number === 2.71828)) return;
+        if (termTwo !== "" && (number === 3.14 || number === 2.71828)) return;
 
         if (termTwo.includes(".") && number === ".") return;
 
