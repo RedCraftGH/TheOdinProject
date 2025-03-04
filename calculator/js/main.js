@@ -55,6 +55,8 @@ function handleNumber(number) {
             return;
         }
 
+        if (termOne !== "0" && (number === 3.14 || number === 2.71828)) return;
+
         if (termOne.includes(".") && number === ".") return;
 
         termOne = (termOne == "0") ? number.toString() : termOne.toString() + number;
@@ -67,6 +69,8 @@ function handleNumber(number) {
             handleOverflow();
             return;
         }
+
+        if (termTwo !== "0" && (number === 3.14 || number === 2.71828)) return;
 
         if (termTwo.includes(".") && number === ".") return;
 
