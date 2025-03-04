@@ -275,6 +275,11 @@ function square() {
 
         updateDisplay(termOne);
     }
+
+    if (checkOverflow()) {
+
+        handleOverflow();
+    }
 }
 
 function turnOff() {
