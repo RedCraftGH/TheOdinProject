@@ -60,7 +60,8 @@ body {
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
-    font-size: 4rem;
+    text-align: end;
+    font-size: 3rem;
     line-height: 65%;
     vertical-align: 65%;
 }
@@ -114,7 +115,7 @@ body {
     }
     .display {
 
-        font-size: 10rem;
+        font-size: 8rem;
     }
     .button {
 

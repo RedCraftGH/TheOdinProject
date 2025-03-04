@@ -56,7 +56,7 @@ function handleNumber(number) {
             return;
         }
 
-        termOne = (termOne == "0") ? number.toString() : termOne.toString() + number;
+        termOne = termOne.toString() + number;
         
         updateDisplay(termOne);
         console.log({termOne});
@@ -172,42 +172,147 @@ function checkOverflow() {
 
 function clearCalc() {
 
-    updateDisplay("0");
-    termOne = "";
+    updateDisplay();
+    termOne = "0";
     termTwo = "";
     termOneComplete = false;
     currentOperation = false;
     expectOperator = false;
+    lastOp.operator = null;
+    lastOp.term = null;
 }
 
 function sqrt() {
 
+    if (termOneComplete) {
 
+        if (termTwo !== "") {
+
+           termTwo =  Math.sqrt(parseFloat(termTwo)).toString();
+
+           termTwo = fixDecimalLength(termTwo);
+
+           updateDisplay(termTwo);
+        }
+    } else {
+
+        termOne = Math.sqrt(parseFloat(termOne)).toString();
+
+        termOne = fixDecimalLength(termOne);
+
+        updateDisplay(termOne);
+    }
 }
 
 function toggleNegPos() {
 
+    if (termOneComplete) {
 
+        if (termTwo !== "") {
+
+            termTwo = (termTwo.includes("-")) ? termTwo.slice(1) : "-" + termTwo;
+
+            updateDisplay(termTwo);
+        }
+    } else {
+
+        termOne = (termOne.includes("-")) ? termOne.slice(1) : "-" + termOne;
+
+        updateDisplay(termOne);
+    }
 }
 
 function deleteCharacter() {
 
+    if (termOneComplete) {
 
+        if (termTwo === "") {
+
+            termOneComplete = false;
+            updateDisplay(termOne);
+        } else {
+
+            termTwo = termTwo.slice(0, -1);
+            updateDisplay(termTwo);
+        }
+    } else {
+
+        if (termOne !== "0") {
+
+            termOneLength = termOne.length;
+            console.log({termOneLength});
+
+            if (termOne.length === 1) {
+
+                termOne = "0";
+                updateDisplay();
+                return;
+            }
+
+            termOne = termOne.slice(0, -1);
+
+            updateDisplay(termOne);
+        }
+    }
 }
 
 function square() {
 
+    if (termOneComplete) {
 
+        if (termTwo !== "") {
+
+            termTwo = Math.pow(parseFloat(termTwo), 2).toString();
+
+            termTwo = fixDecimalLength(termTwo);
+
+            updateDisplay(termTwo);
+        }
+    } else {
+
+        termOne = Math.pow(parseFloat(termOne), 2).toString();
+
+        termOne = fixDecimalLength(termOne);
+
+        updateDisplay(termOne);
+    }
 }
 
 function turnOff() {
 
+    if (termOne !== "") {
 
+        clearCalc();
+        termOne = "";
+    } else {
+
+        clearCalc();
+        termOne = "0"
+    }
+
+    updateDisplay(termOne);
 }
 
 function convertPercent() {
 
+    if (termOneComplete) {
 
+        if (termTwo !== "") {
+
+            termTwo = (parseFloat(termTwo) / 100).toString();
+
+            termTwo = fixDecimalLength(termTwo);
+
+            updateDisplay(termTwo);
+        }
+    } else {
+
+        termOne = (parseFloat(termOne) / 100).toString();
+
+        termOne = fixDecimalLength(termOne);
+        
+        updateDisplay(termOne);
+    }
 }
 
 function findAnswer() {
@@ -255,7 +360,9 @@ function findAnswer() {
 
     lastOp.operator = currentOperation;
     lastOp.term = termTwo;
-    clearCalc();
+
+    currentOperation = false;
+    termTwo = "";
 
     console.log({answer});
 
@@ -327,10 +434,10 @@ function divideTerms() {
 
 function fixDecimalLength(answer) {
 
-    if (answer.includes(".") && answer.length > 11) {
+    if (answer.includes(".") && answer.length > 10) {
 
         let divider = answer.split(".");
-        let decimalLimit = 6 - divider[0].length;
+        let decimalLimit = 7 - divider[0].length;
         if (decimalLimit <= 0) {
            decimalLimit = 0;
         }
