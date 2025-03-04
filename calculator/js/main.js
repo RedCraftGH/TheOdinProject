@@ -55,6 +55,8 @@ function handleNumber(number) {
             return;
         }
 
+        if (termOne.includes(".") && number === ".") return;
+
         termOne = (termOne == "0") ? number.toString() : termOne.toString() + number;
         
         updateDisplay(termOne);
@@ -65,6 +67,8 @@ function handleNumber(number) {
             handleOverflow();
             return;
         }
+
+        if (termTwo.includes(".") && number === ".") return;
 
         termTwo = termTwo.toString() + number;
         updateDisplay(termTwo);
@@ -430,6 +434,6 @@ function fixDecimalLength(answer) {
 
         answer = parseFloat(answer);
     }
-    
+
     return answer;
 }
