@@ -25,7 +25,6 @@ const commandIds = [
 
 function sendInput(buttonId) {
 
-    console.log(buttonId);
     if (numberIds.includes(buttonId)) {
 
         handleNumber(buttonId);
@@ -56,10 +55,9 @@ function handleNumber(number) {
             return;
         }
 
-        termOne = termOne.toString() + number;
+        termOne = (termOne == "0") ? number.toString() : termOne.toString() + number;
         
         updateDisplay(termOne);
-        console.log({termOne});
     } else {
 
         if (checkOverflow()) {
@@ -70,7 +68,6 @@ function handleNumber(number) {
 
         termTwo = termTwo.toString() + number;
         updateDisplay(termTwo);
-        console.log({termTwo});
     }
 }
 
@@ -95,7 +92,6 @@ function handleOperator(operator) {
 
         findAnswer();
         currentOperation = operator;
-        console.log({currentOperation});
     }
     expectOperator = false;
 }
@@ -240,7 +236,6 @@ function deleteCharacter() {
         if (termOne !== "0") {
 
             termOneLength = termOne.length;
-            console.log({termOneLength});
 
             if (termOne.length === 1) {
 
@@ -310,7 +305,7 @@ function convertPercent() {
         termOne = (parseFloat(termOne) / 100).toString();
 
         termOne = fixDecimalLength(termOne);
-        
+
         updateDisplay(termOne);
     }
 }
@@ -318,18 +313,11 @@ function convertPercent() {
 function findAnswer() {
 
     let answer;
-
-    console.log({termOneComplete, termOne, termTwo});
     
     if (termTwo === "") {
 
-        console.log("null");
-        console.log(lastOp.operator);
-        console.log({currentOperation});
-
         if (lastOp.operator === null) {
 
-            handleInvalidOperation();
             return;
         } else if (currentOperation == false) {
 
@@ -364,12 +352,9 @@ function findAnswer() {
     currentOperation = false;
     termTwo = "";
 
-    console.log({answer});
-
     termOne = answer.toString();
     termOneComplete = true;
     expectOperator = true;
-    console.log({termOne});
     updateDisplay(termOne);
 
     if (checkOverflow()) {
@@ -396,7 +381,6 @@ function subtractTerms() {
     termTwo = parseFloat(termTwo);
 
     let answer = (termOne - termTwo).toString();
-    console.log({answer});
 
     answer = fixDecimalLength(answer);
 
@@ -445,7 +429,7 @@ function fixDecimalLength(answer) {
     } else {
 
         answer = parseFloat(answer);
-        console.log({answer});
     }
+    
     return answer;
 }
